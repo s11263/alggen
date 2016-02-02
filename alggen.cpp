@@ -3,6 +3,7 @@
 # include <iomanip>
 # include <cmath>
 # include <cstring>
+# include <chrono>
 
 using namespace std;
 
@@ -41,6 +42,7 @@ void crossO ( int one, int two, int &seed );
 
 int main ( )
 {
+  auto t0 = std::chrono::high_resolution_clock::now();
   int generation;
   int i;
   int seed;
@@ -79,6 +81,10 @@ int main ( )
   cout << "  Najlepszy fitness = " << population[POPSIZE].fitness << "\n";
 
   cout << "\n  Program wykonał się prawidłowo\n\n";
+  auto t1 = std::chrono::high_resolution_clock::now();
+  auto dt = 1.e-9*std::chrono::duration_cast<std::chrono::nanoseconds>(t1-t0).count();
+  cout << "\n Czas potrzeny na wykonanie algorytmu genetycznego: " << dt;
+  
   return 0;
 }
 
@@ -87,7 +93,7 @@ void crossover ( int &seed )			//  crossover wybiera dwóch rodziców do pojedyn
   const double a = 0.0;
   const double b = 1.0;
   int mem;								//  member - osobnik
-  int one;
+  int one = 0;
   int first = 0;  						//  ilość wybranych osobników
   double x;
 
@@ -116,9 +122,9 @@ void elite ( )					//  ma za zadanie przechowywać najlepszego osobnika poprzedn
 {
   int i;
   double best; 					//  najlepsza wartość fitness
-  int best_mem;
+  int best_mem = 0;
   double worst;					//  najgorsza wartość fitness
-  int worst_mem;
+  int worst_mem = 0;
 
   best = population[0].fitness;
   worst = population[0].fitness;
