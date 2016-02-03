@@ -44,14 +44,15 @@ double pretender;                 //  pretender do najwyższego wyniku
 int incumbency;                   //  kadencja najwyższego wyniku
 double bestRooms[VARCOUNT];
   
-struct neighbour 
+struct Neighbour 
 {
 	double rooms[VARCOUNT]; 	     	    //  tablica z wartościami zmiennych
     double rent;			                //  wartość funkcji
     double topBorder[VARCOUNT];	        	//  górna granica zmiennych
     double bottomBorder[VARCOUNT];	        //  dolna granica zmiennych	
 };
-  
+
+struct Neighbour neighbour;
 void checkChange ( double pretender );      //  sprawdź czy nastąpiła zmiana najlepszego wyniku
 void pickSpot ( int &seed );            	//  wybierz punkt startowy
 void visitNeighbours ( );                 	//  odwiedź sąsiadów, sprawdź czy któryś nie jest lepszym wynikiem
@@ -124,7 +125,7 @@ int main ( )
   }
     
   
-  cout << "\n Najlepsze wartości zmiennych to: " << bestRooms[0] << ", " << bestRooms[1] << ", " << bestRooms[2] << ". \n" 
+  cout << "\n\n ALGORYTM WSPINACZKOWY: \n\n Najlepsze wartości zmiennych to: " << bestRooms[0] << ", " << bestRooms[1] << ", " << bestRooms[2] << ". \n"; 
   cout << "\n Najwyższy wynik funkcji to: " << kingOfTheHill << ". \n";
    
   auto t3 = std::chrono::high_resolution_clock::now();
@@ -157,27 +158,26 @@ void rentCalc ( ) {     //  trzeba zmienić w zależności od wzoru funkcji
 void checkChange (double pretender) 
 {
 	int i;
-	i = 0;
 	
 	if ( incumbency == -1 )
 	{
 		incumbency = 0; 
 		kingOfTheHill = pretender;
 		
-		for ( i; i < VARCOUNT; i++)
+		for ( i = 0; i < VARCOUNT; i++)
 		{
 			bestRooms[i] = neighbour.rooms[i];
 		}
 	} else 
 	{
-		if ( pretender < = kingOfTheHill) 
+		if ( pretender <= kingOfTheHill) 
 		{
 			incumbency++;
 		} else
 		{
 			incumbency = 0;
 			kingOfTheHill = pretender; 
-			for ( i; i < VARCOUNT; i++)
+			for ( i = 0; i < VARCOUNT; i++)
 			{
 				bestRooms[i] = neighbour.rooms[i];
 			}
@@ -191,7 +191,7 @@ void visitNeighbours ( )						//  kolejno zwiększam każdą zmienną
 	int i;
 	i = 0;
 	
-	for ( i; i < VARCOUNT; i++ ) {
+	for ( i = 0; i < VARCOUNT; i++ ) {
 		if ( neighbour.rooms[i] <= neighbour.topBorder[i] ) 
 		{
 			neighbour.rooms[i] += 0.01;
