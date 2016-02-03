@@ -46,15 +46,16 @@ double bestRooms[VARCOUNT];
   
 struct neighbour 
 {
-    double rooms[VARCOUNT]; 	     	    //  tablica z wartościami zmiennych
+	double rooms[VARCOUNT]; 	     	    //  tablica z wartościami zmiennych
     double rent;			                //  wartość funkcji
     double topBorder[VARCOUNT];	        	//  górna granica zmiennych
     double bottomBorder[VARCOUNT];	        //  dolna granica zmiennych	
 };
   
-void checkChange ( double pretender );           //  sprawdź czy nastąpiła zmiana najlepszego wyniku
-void pickSpot ( int &seed );              //  wybierz punkt startowy
-void visitNeighbours ( );                 //  odwiedź sąsiadów, sprawdź czy któryś nie jest lepszym wynikiem
+void checkChange ( double pretender );      //  sprawdź czy nastąpiła zmiana najlepszego wyniku
+void pickSpot ( int &seed );            	//  wybierz punkt startowy
+void visitNeighbours ( );                 	//  odwiedź sąsiadów, sprawdź czy któryś nie jest lepszym wynikiem
+void rentCalc ( );							//  obliczenie wartości funkcji
 
 
 int main ( )
@@ -115,12 +116,13 @@ int main ( )
   neighbour.bottomBorder[1] =  4.0;
   neighbour.bottomBorder[2] =  4.0;
   
-  while ( incumbency < 500 )                //  Zapewni nam brak pętli nieskończonej
+  while ( incumbency < 1000 )                //  Zapewni nam brak pętli nieskończonej
   {
     pickSpot ( seed );
-	visitNeighbours ( );  
     checkChange ( neighbour.rent );
+	visitNeighbours ( );  
   }
+    
   
   cout << "\n Najlepsze wartości zmiennych to: " << bestRooms[0] << ", " << bestRooms[1] << ", " << bestRooms[2] << ". \n" 
   cout << "\n Najwyższy wynik funkcji to: " << kingOfTheHill << ". \n";
@@ -143,10 +145,14 @@ void pickSpot ( int &seed )
 	x = pseudo_II ( neighbour.bottomBorder[i], neighbour.topBorder[i], seed );
 	neighbour.rooms[i] = x;
   }
-  neighbour.rent = 2 * neighbour.rooms[0] * neighbour.rooms[0]   +  neighbour.rooms[1] + 2 * neighbour.rooms[2];
+  rentCalc ( );
   return;
 }
 
+void rentCalc ( ) {
+	neighbour.rent = 2 * neighbour.rooms[0] * neighbour.rooms[0]   +  neighbour.rooms[1] + 2 * neighbour.rooms[2];
+	return; 
+}
 
 void checkChange (double pretender) 
 {
@@ -171,6 +177,23 @@ void checkChange (double pretender)
 		bestRooms[1] = neighbour.rooms[1];
 		bestRooms[2] = neighbour.rooms[2];
     }
+	return;
+}
+
+void visitNeighbours ( )						//  kolejno zwiększam każdą zmienną
+{
+	int i;
+	i = 0;
+	
+	for ( i; i < VARCOUNT; i++ ) {
+		if ( neighbour.rooms[i] <= neighbour.topBorder[i] ) 
+		{
+			neighbour.rooms[i] += 0.01;
+			rentCalc ( );
+			checkChange( neighbour.rent );
+		}
+	}
+	
 	return;
 }
 
