@@ -91,6 +91,7 @@ int main ( )
   double kingOfTheHill;             //  aktualnie najwyższy wynik
   double pretender;                 //  pretender do najwyższego wyniku
   int incumbency;                   //  kadencja najwyższego wyniku
+  double bestRooms[VARCOUNT];
   
   struct neighbour 
   {
@@ -105,7 +106,7 @@ int main ( )
   void visitNeighbours ( );                 //  odwiedź sąsiadów, sprawdź czy któryś nie jest lepszym wynikiem
   
   seed = 123456789;
-  incumbency = 0;
+  incumbency = -1;
   
   while ( incumbency < 500 )                //  Zapewni nam brak pętli nieskończonej
   {
@@ -113,8 +114,9 @@ int main ( )
     checkChange ( pretender );
   }
  // pretender = 2 * neighbour.rooms[0] * neighbour.rooms[0]   +  neighbour.rooms[1] + 2 * neighbour.rooms[2];    
-   
-  cout << "\n Najwyższy wynik funkcji to: " << kingOfTheHill;
+  
+  cout << "\n Najlepsze wartości zmiennych to: " << bestRooms[0] << ", " << bestRooms[1] << ", " << bestRooms[2] << ". \n" 
+  cout << "\n Najwyższy wynik funkcji to: " << kingOfTheHill << ". \n";
    
   auto t3 = std::chrono::high_resolution_clock::now();
   auto dt2 = 1.e-9*std::chrono::duration_cast<std::chrono::nanoseconds>(t3-t2).count();
@@ -127,6 +129,16 @@ int main ( )
 
 void checkChange (double pretender) 
 {
+	if ( incumbency == -1 ) 
+	{
+		incumbency = 0;
+        kingOfTheHill = pretender; 
+		bestRooms[0] = neighbour.rooms[0];
+		bestRooms[1] = neighbour.rooms[1];
+		bestRooms[2] = neighbour.rooms[2];
+		return;
+	}
+	
     if ( pretender < = kingOfTheHill) 
     {
         incumbency++;
@@ -134,7 +146,11 @@ void checkChange (double pretender)
     {
         incumbency = 0;
         kingOfTheHill = pretender; 
+		bestRooms[0] = neighbour.rooms[0];
+		bestRooms[1] = neighbour.rooms[1];
+		bestRooms[2] = neighbour.rooms[2];
     }
+	return;
 }
 
 void crossover ( int &seed )			//  crossover wybiera dwóch rodziców do pojedynczego punktu crossovera. Seed dla generatora liczb losowych
