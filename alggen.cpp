@@ -39,6 +39,23 @@ void report ( int generation );
 void selector ( int &seed );
 void crossO ( int one, int two, int &seed );
 
+double kingOfTheHill;             //  aktualnie najwyższy wynik
+double pretender;                 //  pretender do najwyższego wyniku
+int incumbency;                   //  kadencja najwyższego wyniku
+double bestRooms[VARCOUNT];
+  
+struct neighbour 
+{
+	double rooms[VARCOUNT]; 	     	    //  tablica z wartościami zmiennych
+    double rent;			                //  wartość funkcji
+    double topBorder[VARCOUNT];	        	//  górna granica zmiennych
+    double bottomBorder[VARCOUNT];	        //  dolna granica zmiennych	
+};
+  
+void checkChange ( double pretender );           //  sprawdź czy nastąpiła zmiana najlepszego wyniku
+void pickSpot ( int &seed );              //  wybierz punkt startowy
+void visitNeighbours ( );                 //  odwiedź sąsiadów, sprawdź czy któryś nie jest lepszym wynikiem
+
 
 int main ( )
 {
@@ -88,32 +105,23 @@ int main ( )
   // ALGORTYM WSPINACZKOWY:
   auto t2 = std::chrono::high_resolution_clock::now();
   
-  double kingOfTheHill;             //  aktualnie najwyższy wynik
-  double pretender;                 //  pretender do najwyższego wyniku
-  int incumbency;                   //  kadencja najwyższego wyniku
-  double bestRooms[VARCOUNT];
-  
-  struct neighbour 
-  {
-    double rooms[VARCOUNT]; 	     	    //  tablica z wartościami zmiennych
-    double rent;			                //  wartość funkcji
-    double topBorder[VARCOUNT];	        	//  górna granica zmiennych
-    double bottomBorder[VARCOUNT];	        //  dolna granica zmiennych	
-  };
-  
-  void checkChange ( double pretender );           //  sprawdź czy nastąpiła zmiana najlepszego wyniku
-  void pickSpot ( int &seed );              //  wybierz punkt startowy
-  void visitNeighbours ( );                 //  odwiedź sąsiadów, sprawdź czy któryś nie jest lepszym wynikiem
-  
   seed = 123456789;
   incumbency = -1;
+  neighbour.topBorder[0] = -1.0;                                //  podajemy przedziały ograniczające zmienne
+  neighbour.topBorder[1] = 1.0;
+  neighbour.topBorder[2] = 0.0;
+
+  neighbour.bottomBorder[0] =  1.0;
+  neighbour.bottomBorder[1] =  4.0;
+  neighbour.bottomBorder[2] =  4.0;
   
   while ( incumbency < 500 )                //  Zapewni nam brak pętli nieskończonej
   {
     pickSpot ( seed );
-    checkChange ( pretender );
+	visitNeighbours ( );  
+    checkChange ( neighbour.rent );
   }
- // pretender = 2 * neighbour.rooms[0] * neighbour.rooms[0]   +  neighbour.rooms[1] + 2 * neighbour.rooms[2];    
+    
   
   cout << "\n Najlepsze wartości zmiennych to: " << bestRooms[0] << ", " << bestRooms[1] << ", " << bestRooms[2] << ". \n" 
   cout << "\n Najwyższy wynik funkcji to: " << kingOfTheHill << ". \n";
@@ -125,6 +133,19 @@ int main ( )
   return 0;
 }
 
+void pickSpot ( int &seed ) 
+{
+  double x;
+  int i;
+  i = 0;
+  
+  for ( i = 0; i < VARCOUNT; i++ )
+  {
+	x = pseudo_II ( neighbour.bottomBorder[i], neighbour.topBorder[i], seed );
+	neighbour.rooms[i] = x;
+  }
+  neighbour.rent = 2 * neighbour.rooms[0] * neighbour.rooms[0]   +  neighbour.rooms[1] + 2 * neighbour.rooms[2];
+}
 
 
 void checkChange (double pretender) 
