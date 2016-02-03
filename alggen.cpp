@@ -88,6 +88,20 @@ int main ( )
   auto t2 = std::chrono::high_resolution_clock::now();
   
   // koniec petli po x iteracjach, jesli wynik nie ulegl zmianie
+  double kingOftheHill;             //  aktualnie najwyższy wynik
+  double pretender;                 //  pretender do najwyższego wyniku
+  int incumbency;                   //  kadencja najwyższego wyniku
+  
+  struct neighbour 
+  {
+    double rooms[VARCOUNT]; 	     	    //  tablica z wartościami zmiennych
+    double rent;			                //  wartość funkcji
+    double topBorder[VARCOUNT];	        	//  górna granica zmiennych
+    double bottomBorder[VARCOUNT];	        //  dolna granica zmiennych	
+  };
+  
+  void checkChange ( pretender );
+  void pickSpot ( int &seed );
   
   auto t3 = std::chrono::high_resolution_clock::now();
   auto dt2 = 1.e-9*std::chrono::duration_cast<std::chrono::nanoseconds>(t3-t2).count();
