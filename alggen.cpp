@@ -46,7 +46,7 @@ double bestRooms[VARCOUNT];
   
 struct neighbour 
 {
-	double rooms[VARCOUNT]; 	     	    //  tablica z wartościami zmiennych
+    double rooms[VARCOUNT]; 	     	    //  tablica z wartościami zmiennych
     double rent;			                //  wartość funkcji
     double topBorder[VARCOUNT];	        	//  górna granica zmiennych
     double bottomBorder[VARCOUNT];	        //  dolna granica zmiennych	
@@ -121,7 +121,6 @@ int main ( )
 	visitNeighbours ( );  
     checkChange ( neighbour.rent );
   }
-    
   
   cout << "\n Najlepsze wartości zmiennych to: " << bestRooms[0] << ", " << bestRooms[1] << ", " << bestRooms[2] << ". \n" 
   cout << "\n Najwyższy wynik funkcji to: " << kingOfTheHill << ". \n";
@@ -145,6 +144,7 @@ void pickSpot ( int &seed )
 	neighbour.rooms[i] = x;
   }
   neighbour.rent = 2 * neighbour.rooms[0] * neighbour.rooms[0]   +  neighbour.rooms[1] + 2 * neighbour.rooms[2];
+  return;
 }
 
 
