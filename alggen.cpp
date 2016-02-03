@@ -149,34 +149,40 @@ void pickSpot ( int &seed )
   return;
 }
 
-void rentCalc ( ) {
+void rentCalc ( ) {     //  trzeba zmienić w zależności od wzoru funkcji 
 	neighbour.rent = 2 * neighbour.rooms[0] * neighbour.rooms[0]   +  neighbour.rooms[1] + 2 * neighbour.rooms[2];
 	return; 
 }
 
 void checkChange (double pretender) 
 {
-	if ( incumbency == -1 ) 
-	{
-		incumbency = 0;
-        kingOfTheHill = pretender; 
-		bestRooms[0] = neighbour.rooms[0];
-		bestRooms[1] = neighbour.rooms[1];
-		bestRooms[2] = neighbour.rooms[2];
-		return;
-	}
+	int i;
+	i = 0;
 	
-    if ( pretender < = kingOfTheHill) 
-    {
-        incumbency++;
-    } else
-    {
-        incumbency = 0;
-        kingOfTheHill = pretender; 
-		bestRooms[0] = neighbour.rooms[0];
-		bestRooms[1] = neighbour.rooms[1];
-		bestRooms[2] = neighbour.rooms[2];
-    }
+	if ( incumbency == -1 )
+	{
+		incumbency = 0; 
+		kingOfTheHill = pretender;
+		
+		for ( i; i < VARCOUNT; i++)
+		{
+			bestRooms[i] = neighbour.rooms[i];
+		}
+	} else 
+	{
+		if ( pretender < = kingOfTheHill) 
+		{
+			incumbency++;
+		} else
+		{
+			incumbency = 0;
+			kingOfTheHill = pretender; 
+			for ( i; i < VARCOUNT; i++)
+			{
+				bestRooms[i] = neighbour.rooms[i];
+			}
+		}
+	}
 	return;
 }
 
