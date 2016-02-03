@@ -99,7 +99,6 @@ int main ( )
   cout << "\n";
   cout << "  Najlepszy fitness = " << population[POPSIZE].fitness << "\n";
 
-  cout << "\n  Program wykonał się prawidłowo\n\n";
   auto t1 = std::chrono::high_resolution_clock::now();
   auto dt = 1.e-9*std::chrono::duration_cast<std::chrono::nanoseconds>(t1-t0).count();
   cout << "\n Czas potrzeny na wykonanie algorytmu genetycznego: " << dt;
@@ -131,6 +130,8 @@ int main ( )
   auto t3 = std::chrono::high_resolution_clock::now();
   auto dt2 = 1.e-9*std::chrono::duration_cast<std::chrono::nanoseconds>(t3-t2).count();
   cout << "\n Czas potrzeny na wykonanie algorytmu wspinaczkowego: " << dt2;
+  
+  cout << "\n\n  Program wykonał się prawidłowo\n\n";
   
   return 0;
 }
