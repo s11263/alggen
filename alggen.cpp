@@ -116,22 +116,29 @@ int main ( )
   neighbour.bottomBorder[1] =  4.0;
   neighbour.bottomBorder[2] =  4.0;
   
-  while ( incumbency < 1000 )                //  Zapewni nam brak pętli nieskończonej
+  while ( incumbency < GENCOUNT )                //  Zapewni nam brak pętli nieskończonej
   {
     pickSpot ( seed );
     checkChange ( neighbour.rent );
 	visitNeighbours ( );  
   }
-    
   
-  cout << "\n\n ALGORYTM WSPINACZKOWY: \n\n Najlepsze wartości zmiennych to: " << bestRooms[0] << ", " << bestRooms[1] << ", " << bestRooms[2] << ". \n"; 
-  cout << "\n Najwyższy wynik funkcji to: " << kingOfTheHill << ". \n";
-   
+  
+  cout << "\n\n ALGORYTM WSPINACZKOWY: \n";  
+  cout << "\n  Najlepszy wynik po " << GENCOUNT << " wspinaczkach:\n\n";
+  
+  for ( i = 0; i < VARCOUNT; i++ )
+  {
+    cout << "  var(" << i << ") = " << bestRooms[i] << "\n";
+  }
+  
+  cout << "\n Najwyższa wartość funkcji to: " << kingOfTheHill << ". \n";
+  
   auto t3 = std::chrono::high_resolution_clock::now();
   auto dt2 = 1.e-9*std::chrono::duration_cast<std::chrono::nanoseconds>(t3-t2).count();
   cout << "\n Czas potrzeny na wykonanie algorytmu wspinaczkowego: " << dt2;
   
-  cout << "\n\n  Program wykonał się prawidłowo\n\n";
+    cout << "\n\n Program wykonał się prawidłowo\n\n";
   
   return 0;
 }
@@ -195,7 +202,7 @@ void visitNeighbours ( )						//  kolejno zwiększam każdą zmienną
 	for ( i = 0; i < VARCOUNT; i++ ) {
 		if ( neighbour.rooms[i] <= neighbour.topBorder[i] ) 
 		{
-			neighbour.rooms[i] += 0.01;
+			neighbour.rooms[i] += 0.001;
 			rentCalc ( );
 			checkChange( neighbour.rent );
 		}
