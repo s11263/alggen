@@ -85,10 +85,10 @@ int main ( )
   auto dt = 1.e-9*std::chrono::duration_cast<std::chrono::nanoseconds>(t1-t0).count();
   cout << "\n Czas potrzeny na wykonanie algorytmu genetycznego: " << dt;
   
+  // ALGORTYM WSPINACZKOWY:
   auto t2 = std::chrono::high_resolution_clock::now();
   
-  // koniec petli po x iteracjach, jesli wynik nie ulegl zmianie
-  double kingOftheHill;             //  aktualnie najwyższy wynik
+  double kingOfTheHill;             //  aktualnie najwyższy wynik
   double pretender;                 //  pretender do najwyższego wyniku
   int incumbency;                   //  kadencja najwyższego wyniku
   
@@ -100,14 +100,41 @@ int main ( )
     double bottomBorder[VARCOUNT];	        //  dolna granica zmiennych	
   };
   
-  void checkChange ( pretender );
-  void pickSpot ( int &seed );
+  void checkChange ( double pretender );           //  sprawdź czy nastąpiła zmiana najlepszego wyniku
+  void pickSpot ( int &seed );              //  wybierz punkt startowy
+  void visitNeighbours ( );                 //  odwiedź sąsiadów, sprawdź czy któryś nie jest lepszym wynikiem
   
+  seed = 123456789;
+  incumbency = 0;
+  
+  while ( incumbency < 500 )                //  Zapewni nam brak pętli nieskończonej
+  {
+    pickSpot ( seed );
+    checkChange ( pretender );
+  }
+ // pretender = 2 * neighbour.rooms[0] * neighbour.rooms[0]   +  neighbour.rooms[1] + 2 * neighbour.rooms[2];    
+   
+  cout << "\n Najwyższy wynik funkcji to: " << kingOfTheHill;
+   
   auto t3 = std::chrono::high_resolution_clock::now();
   auto dt2 = 1.e-9*std::chrono::duration_cast<std::chrono::nanoseconds>(t3-t2).count();
-  cout << "\n Czas potrzeny na wykonanie algorytmu genetycznego: " << dt2;
+  cout << "\n Czas potrzeny na wykonanie algorytmu wspinaczkowego: " << dt2;
   
   return 0;
+}
+
+
+
+void checkChange (double pretender) 
+{
+    if ( pretender < = kingOfTheHill) 
+    {
+        incumbency++;
+    } else
+    {
+        incumbency = 0;
+        kingOfTheHill = pretender; 
+    }
 }
 
 void crossover ( int &seed )			//  crossover wybiera dwóch rodziców do pojedynczego punktu crossovera. Seed dla generatora liczb losowych
@@ -206,7 +233,6 @@ void elite ( )					//  ma za zadanie przechowywać najlepszego osobnika poprzedn
 
 void evaluate ( )			//  implementuje zdefiniowaną przez użytkownika funkcję skalarną. Przykładowa funkcja na potrzeby tego programu to:
 							//  2x[1]^2+(x[2]+x[3])-x[3]
-
 {
   int member;
   int i;
